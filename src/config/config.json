@@ -1,10 +1,9 @@
 {
   "development": {
-    "username": "sql_ult_unlockca",
-    "password": "ReJNzy82FMGGxX7A",
-    "database": "sql_ult_unlockca",
-    "host": "ult.unlockcar.co",
-    "port": "3308",
+    "username": "root",
+    "password": "kali",
+    "database": "unlock_landing",
+    "host": "localhost",
     "dialect": "mysql",
     "timezone": "+07:00",
     "logging": false

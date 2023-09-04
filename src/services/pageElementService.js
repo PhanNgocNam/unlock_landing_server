@@ -68,14 +68,24 @@ module.exports.updateTextElementService = ({ part_id, ...body }) =>
 module.exports.updateImageElementService = async (id, filename) => {
   const found = await db.Page.count({ where: { part_id: id } });
   if (!found) {
-    const newImgInstance = await db.Page.create({
-      part_id: id,
-      content: `${process.env.HOST}/assets/images/${filename}`,
-      isDeleted: 0,
-      permision: 0,
-      special: 0,
-      createdAt: new Date().getTime(),
-    });
+    const newImgInstance = await db.Page.bulkCreate([
+      {
+        part_id: id,
+        content: `${process.env.HOST}/assets/images/${filename}`,
+        isDeleted: 0,
+        permision: 0,
+        special: 0,
+        createdAt: new Date().getTime(),
+      },
+      {
+        part_id: `${id}-thumb`,
+        content: `${process.env.HOST}/assets/images/thumb-${filename}`,
+        isDeleted: 0,
+        permision: 0,
+        special: 0,
+        createdAt: new Date().getTime(),
+      },
+    ]);
     return newImgInstance.dataValues;
   } else {
     const imgInstance = await db.Page.findOne({ where: { part_id: id } });

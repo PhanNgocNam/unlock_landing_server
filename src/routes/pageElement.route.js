@@ -1,42 +1,33 @@
 const express = require("express");
 const pagesRouter = express.Router();
-const path = require("path");
-const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, "public/assets/images/");
-  },
-  filename: (req, file, callback) => {
-    callback(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
+
+const { upload } = require("../utils/multer");
 
 const {
   getAllPageElement,
   updateTextElement,
-  updateImageElement,
+  updateImageElementController,
 } = require("../controller/pageElementController");
-const {
-  authenticateToken,
-  isAdmin,
-} = require("../middlewares/authenticateToken");
+const { authenticateToken } = require("../middlewares/authenticateToken");
+const { checkPermission } = require("../middlewares/checkPermission");
+const { resizeImage } = require("../middlewares/resizeImage");
 
 pagesRouter.get("/getAllPageElement", getAllPageElement);
 
 pagesRouter.put(
   "/updateTextElement",
   authenticateToken,
-  isAdmin([-1]),
+  checkPermission([-1]),
   updateTextElement
 );
 
 pagesRouter.put(
   "/updateImageElement",
-  upload.single("file"),
   authenticateToken,
-  isAdmin([-1]),
-  updateImageElement
+  checkPermission([-1]),
+  upload.single("file"),
+  resizeImage,
+  updateImageElementController
 );
 
 module.exports = pagesRouter;

@@ -21,10 +21,9 @@ module.exports = (sequelize, DataTypes) => {
 
       createdAt: {
         allowNull: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         defaultValue: new Date().getTime(),
       },
-
     },
     {
       sequelize,

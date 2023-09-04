@@ -34,9 +34,10 @@ module.exports.updateTextElement = async (req, res) => {
   }
 };
 
-module.exports.updateImageElement = async (req, res) => {
+module.exports.updateImageElementController = async (req, res, next) => {
   const { id } = req.body;
-  const filename = req.file.filename;
+  const filename = req.file?.filename || null;
+  if (!filename) next(new Error("Invalid file!"));
   const imgInstance = updateImageElementService(id, filename);
 
   imgInstance.then((image) =>
